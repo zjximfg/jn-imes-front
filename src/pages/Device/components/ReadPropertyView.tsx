@@ -7,6 +7,8 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import {CompatClient, Stomp} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import {MqttResultDataType} from "@/pages/Device/data";
+import {getCurrentCompanyDeviceConnection} from "@/pages/Company/service";
+import {DeviceConnectionDataType} from "@/pages/Company/data";
 
 interface ReadPropertyViewProps {
   visible: boolean;
@@ -29,9 +31,13 @@ const ReadPropertyView: React.FC<ReadPropertyViewProps> = (props) => {
 
   const [devicePropertyList, setDevicePropertyList] = useState<DevicePropertyDataType[]>([]);
 
+  const [deviceConnetion, setDeviceConnection] = useState<Partial<DeviceConnectionDataType>>({});
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const [message, setMessage] = useState<string>("离线状态！");
+
+  const [disabled, setDisabled] = useState<boolean>(true);
 
 
   useEffect(() => {
@@ -39,6 +45,15 @@ const ReadPropertyView: React.FC<ReadPropertyViewProps> = (props) => {
       getReadPropertyListByDeviceId(currentId).then(res => {
         setDevicePropertyList(res);
       });
+      getCurrentCompanyDeviceConnection().then(res => {
+        setDeviceConnection(res);
+        if (res===null || res.mqttServiceIp === null || res.mqttServicePort === null) {
+          setDisabled(true);
+          setMessage("贵公司没有配置设备的连接信息！请设置或联系软件服务部门帮助设置！")
+        } else {
+          setDisabled(false);
+        }
+      })
     } else {
       setDevicePropertyList([]);
     }
@@ -46,7 +61,8 @@ const ReadPropertyView: React.FC<ReadPropertyViewProps> = (props) => {
 
   const handleOnline = () => {
     if (gatewayId === null  || gatewayId === undefined) return;
-    socket = new SockJS( "http://localhost:10001/socket");
+    // socket = new SockJS( "http://localhost:10001/socket");
+    socket = new SockJS("http://" + deviceConnetion.mqttServiceIp + ":" + deviceConnetion.mqttServicePort + "/socket");
     stompClient = Stomp.over(socket);
 
     if (localStorage.getItem('token')) {
@@ -190,7 +206,7 @@ const ReadPropertyView: React.FC<ReadPropertyViewProps> = (props) => {
             <Button
               type="primary"
               icon={<PoweroffOutlined />}
-              disabled={!enableOnline}
+              disabled={!enableOnline || disabled}
               loading={loading}
               onClick={() => handleOnline()}
             >

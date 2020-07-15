@@ -51,3 +51,9 @@ export async function getDeviceConnectionByCompanyId(companyId: string) {
     method: 'get',
   })
 }
+
+export async function getCurrentCompanyDeviceConnection() {
+  return request<Partial<DeviceConnectionDataType>>("/api/company/deviceConnections/currentCompany", {
+    method: 'get',
+  })
+}
