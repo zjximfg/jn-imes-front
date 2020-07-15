@@ -157,12 +157,6 @@ export default defineConfig({
       component: './user/account/AccountSettings',
     },
     {
-      name: '查询表格',
-      icon: 'smile',
-      path: '/listtablelist',
-      component: './ListTableList',
-    },
-    {
       component: './404',
     },
   ],
