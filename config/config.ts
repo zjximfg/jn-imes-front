@@ -147,6 +147,25 @@ export default defineConfig({
       ],
     },
     {
+      path: '/warehouse',
+      name: '仓储管理',
+      icon: 'ApartmentOutlined',
+      routes: [
+        {
+          path: '/warehouse/work-area',
+          name: '工区管理',
+          icon: 'UngroupOutlined',
+          component: './WorkArea',
+        },
+        {
+          path: '/warehouse/material-supplier',
+          name: '原料供应商',
+          icon: 'UngroupOutlined',
+          component: './MaterialSupplier',
+        },
+      ],
+    },
+    {
       path: '/',
       redirect: '/overview',
     },

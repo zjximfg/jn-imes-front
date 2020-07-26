@@ -19,14 +19,20 @@ export default {
       pathRewrite: { '^/api': '' },
     },
     '/api/device': {
-      // target: 'http://182.92.194.48:9002',
+      // target: 'http://182.92.194.48:9003',
       target: 'http://localhost:9003',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
     '/api/project': {
-      // target: 'http://182.92.194.48:9002',
+      // target: 'http://182.92.194.48:9004',
       target: 'http://localhost:9004',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+    '/api/warehouse': {
+      // target: 'http://182.92.194.48:9005',
+      target: 'http://localhost:9005',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
